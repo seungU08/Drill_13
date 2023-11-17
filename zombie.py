@@ -122,6 +122,20 @@ class Zombie:
         self.loc_no = (self.loc_no + 1) % len(self.patrol_locations)
         return BehaviorTree.SUCCESS
 
+    def compare_ball(self):
+        if self.ball_count > play_mode.boy.ball_count:
+            return BehaviorTree.SUCCESS
+        else:
+            return BehaviorTree.FAIL
+
+    def Flee_from_boy(self, r = 0.5):
+        self.state = 'Walk'
+        self.move_slightly_to(-play_mode.boy.x, -play_mode.boy.y)
+        if self.distance_less_than(play_mode.boy.x, play_mode.boy.y, self.x, self.y, r):
+            return BehaviorTree.SUCCESS
+        else:
+            return BehaviorTree.RUNNING
+
     def build_behavior_tree(self):
         a1 = Action('set target location', self.set_target_location, 500, 500)
         a2 = Action('Move to', self.move_to)
@@ -141,6 +155,6 @@ class Zombie:
 
         a5 = Action('순찰 위치 가쟈오기', self.get_patrol_location)
 
-        root = SEQ_patrol = Sequence('순찰', a5, a2)
+        SEQ_patrol = Sequence('순찰', a5, a2)
 
         self.bt = BehaviorTree(root)
