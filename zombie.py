@@ -157,4 +157,8 @@ class Zombie:
 
         SEQ_patrol = Sequence('순찰', a5, a2)
 
+        c2 = Condition('소년보다 볼카운트가 높은가?', self.compare_ball, 7)
+
+
+
         self.bt = BehaviorTree(root)
